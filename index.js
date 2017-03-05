@@ -11,7 +11,7 @@
 // create state which contains an array of objects (items, true/false boolean('checked')) 
 // add in existing html objects provided
 var state = {
-  items: [   
+  items: [
     {item: 'apples', status: false},
     {item: 'oranges', status: false},
     {item: 'pie', status: false}
@@ -35,8 +35,8 @@ function removeItem(oldItem){
 // check if item is in array of objects? if yes, delete that index. if no, error message
   for (var i = 0; i < state.items.length; i++){
     if (oldItem === state.items[i].item){
-      state.items.splice(i, 1)
-      console.log(state.items)
+      state.items.splice(i, 1);
+      console.log(state.items);
     }
   }
 }
@@ -46,10 +46,10 @@ function checkItem(oldItem){
   for (var i = 0; i < state.items.length; i++){
     if (oldItem === state.items[i].item){
       if (state.items[i].status === false){
-        state.items[i].status = true
+        state.items[i].status = true;
       }
       else if (state.items[i].status !== false){
-        state.items[i].status = false
+        state.items[i].status = false;
       }
     }
   }
@@ -66,22 +66,22 @@ function renderList(array){
 // with each object that we have in array, take name and put into html
 // at a particular point and, if false, do the same with toggleClass
   const divMeat = '<div class="shopping-item-controls"><button class="shopping-item-toggle"><span class="button-label">check</span></button><button class="shopping-item-delete"><span class="button-label">delete</span></button></div></li>'
-  array.forEach(htmlGod)
+  array.forEach(htmlGod);
   function htmlGod(theObj){
     if (theObj.status === false){
-      $(".shopping-list").append(`<li><span class="shopping-item">${theObj.item}</span> ${divMeat}`)
+      $(".shopping-list").append(`<li><span class="shopping-item">${theObj.item}</span> ${divMeat}`);
     }   
     else if (theObj.status === true)  {
-      $(".shopping-list").append(`<li><span class="shopping-item shopping-item__checked">${theObj.item}</span> ${divMeat}`)
+      $(".shopping-list").append(`<li><span class="shopping-item shopping-item__checked">${theObj.item}</span> ${divMeat}`);
     }
-  }}
-renderList(state.items)
+  }
+}
+renderList(state.items);
 // step 4
 // event handling for buttons (check, delete, and Add item) being pressed 
 // empty current html upon click
 
-$(document).ready(function(){
-
+$(document).ready(function refreshList(){
   // For click handlers: `this` is the element that was clicked on.
   // 
   // $('.your-thing').click(function(event) {
@@ -92,8 +92,42 @@ $(document).ready(function(){
   // })
 
   $("button.shopping-item-toggle").click(function(event){
-    console.log(this) 
-  })
+    var itemData = $(this).parent().prev().html();
+    checkItem(itemData);
+    $(".shopping-list").empty();
+    renderList(state.items);
+    refreshList();
+  });
+  $("button.shopping-item-delete").click(function(event){
+    var itemData = $(this).parent().prev().html();
+    removeItem(itemData);
+    $(".shopping-list").empty();
+    renderList(state.items);
+    refreshList();
+  });
+  $("#js-shopping-list-form").submit(function(event){
+    event.preventDefault();
+    var itemData = $("#shopping-list-entry").val();
+    if (itemData !== "" && itemData !== " ") {
+      addItem(itemData);
+      $(".shopping-list").empty();
+      renderList(state.items);
+      refreshList();
+      this.reset();
+    };
+  });
+  // $("#js-shopping-list-form > button").click(function(event){
+  //   event.preventDefault();
+  //   var itemData = $("#shopping-list-entry").val();
+  //   if (itemData !== "" && itemData !== " ") {
+  //     addItem(itemData);
+  //     $(".shopping-list").empty();
+  //     renderList(state.items);
+  //     console.log(itemData);
+  //     console.log(state.items);
+  //   }
+  //   refreshList();
+  // });
 })
 
 
